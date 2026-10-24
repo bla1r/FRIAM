@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fire Res is a Myth – Guild Hall</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🔥%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Alegreya+Sans:wght@400;700&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#efe6dc;--panel:#fbf6f0;--ink:#2a1a14;--mute:#6f5748;--line:#d9c7b6;--gold:#b83a0a;--gold-bg:#fbd9bd}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1210;--panel:#251915;--ink:#f1e3d3;--mute:#b59a88;--line:#41302a;--gold:#ff7a2f;--gold-bg:#4a2a18}}
+:root[data-theme="dark"]{--bg:#1a1210;--panel:#251915;--ink:#f1e3d3;--mute:#b59a88;--line:#41302a;--gold:#ff7a2f;--gold-bg:#4a2a18}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Alegreya Sans",system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 48px}
+h1,h2{font-family:"Pirata One",Georgia,serif;font-weight:400;margin:0}
+h2{font-size:1.5rem}
+h1{font-size:2.9rem;line-height:1.1;text-align:center;color:var(--gold);padding-top:8px}
+h1::after{content:"";display:block;height:4px;width:150px;margin:10px auto 0;background:linear-gradient(90deg,#7c1d06,#ff7a2f,#ffd166)}
+#stats{text-align:center;margin-top:12px}
+.sub{color:var(--mute);margin:2px 0 18px}
+nav{display:flex;justify-content:center;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:600 1rem inherit;font-family:inherit;color:var(--mute);cursor:pointer}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold)}
+.panel{background:var(--panel);border:2px solid var(--ink);border-radius:2px;box-shadow:4px 4px 0 var(--gold);padding:14px;margin-bottom:20px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input,select,button.act{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);min-width:0}
+button.act{background:var(--gold);color:var(--panel);border-color:var(--gold);font-weight:600;cursor:pointer}
+button.ghost{background:none;border:0;color:var(--mute);cursor:pointer;font:inherit;padding:4px 8px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mute);font-weight:600;font-size:.9rem}
+.cls{font-weight:600}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;background:var(--gold-bg);color:var(--gold);font-size:.85rem}
+.raid{border-top:1px solid var(--line);padding:12px 0}
+.raid:first-child{border-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--mute);border-radius:14px;padding:3px 10px;font:inherit;font-size:.9rem;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--gold-bg);color:var(--ink);border-color:var(--gold)}
+.empty{color:var(--mute);padding:8px 0}
+body.ro #fm,body.ro #fl,body.ro #fc,body.ro #fi,body.ro #bkload,body.ro #bkopen,body.ro [data-del-m],body.ro [data-del-l],body.ro [data-clear-cat],body.ro details:has(#fc),body.ro details:has(#fi){display:none}
+.grid td,.grid th{white-space:normal;vertical-align:top;min-width:112px;font-size:.9rem}
+.grid td:first-child,.grid th:first-child{position:sticky;left:0;background:var(--panel);white-space:nowrap;min-width:96px}
+.grid td:last-child,.grid th:last-child{min-width:56px}
+.note{color:var(--mute);font-size:.85rem;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Fire Res is a Myth</h1>
+  <p class="sub" id="stats">Guild hall</p>
+  <p class="note" id="sync" style="text-align:center;margin:6px 0 14px"></p>
+  <nav role="tablist">
+    <button role="tab" data-t="roster" aria-selected="true">Roster</button>
+    <button role="tab" data-t="loot" aria-selected="false">Loot</button>
+  </nav>
+  <main id="view"></main>
+  <p class="note">Everything you add saves automatically in this browser on this device.</p>
+  <details class="panel" style="margin-top:16px"><summary>Backup and restore</summary>
+  <p class="sub" style="margin:8px 0">Back up your data to keep a copy or move it to another browser, device or web address.</p>
+  <textarea id="bk" rows="4" style="width:100%" aria-label="Backup data"></textarea>
+  <div class="row" style="margin-top:8px"><button class="act" id="bkmake">Show backup</button><button class="act" id="bkdl">Download file</button><button class="act" id="bkload">Restore from box</button><button class="act" id="bkopen">Open file</button><input type="file" id="bkfile" accept=".json,application/json" hidden></div>
+  <p id="bkmsg" role="status" class="sub" style="margin:8px 0 0"></p></details>
+</div>
+<script>
+const CLASSES={"Druid":"#FF7C0A","Hunter":"#6FA83A","Mage":"#3FC7EB","Paladin":"#E86A9C","Priest":"#9A9A9A","Rogue":"#B59E00","Shaman":"#0070DD","Warlock":"#8788EE","Warrior":"#C69B6D"};
+const ROLES=["Tank","Healer","DPS"],RANKS=["Guild Master","Officer","Raider","Member","Trial"];
+const SLOTS=["Head","Neck","Shoulders","Back","Chest","Wrist","Hands","Waist","Legs","Feet","Finger","Trinket","Main Hand","Off Hand","Ranged"];
+const KEY="forever-guild-v1";
+let S,tab="roster",sheet=0,importMsg="",saveFail=false;
+let db=null,shared=false,ro=false,booting=false,rdocs={},lastJSON={},writeQ=Promise.resolve(),pendingRender=false;
+const nid=()=>Date.now()*100+Math.floor(Math.random()*100);
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);d.items=d.items||[];d.loot=(d.loot||[]).map(l=>({slot:"Other",...l}));delete d.raids;return d}}catch(e){}
+return{members:[{id:1,name:"Arthas",cls:"Paladin",role:"Tank",rank:"Guild Master"},{id:2,name:"Jaina",cls:"Mage",role:"DPS",rank:"Officer"},{id:3,name:"Uther",cls:"Priest",role:"Healer",rank:"Raider"}],items:[],loot:[],next:10}}
+function localSave(){try{localStorage.setItem(KEY,JSON.stringify(S));saveFail=false}catch(e){saveFail=true}}
+function readLocal(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);d.items=d.items||[];d.loot=(d.loot||[]).map(l=>({slot:"Other",...l}));delete d.raids;return d}}catch(e){}return null}
+const TK="fire-res-officer-token";
+let token="",version=-1,saveTimer=null,saving=false,again=false,refetch=false;
+try{token=localStorage.getItem(TK)||""}catch(e){}
+function readLocal(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);d.items=d.items||[];d.loot=(d.loot||[]).map(l=>({slot:"Other",...l}));delete d.raids;return d}}catch(e){}return null}
+function setData(d){S={members:d.members||[],items:d.items||[],loot:d.loot||[],next:0}}
+function typing(){const a=document.activeElement;return!!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&document.querySelector("#view").contains(a))}
+async function call(method,url,body){
+  const r=await fetch(url,{method,cache:"no-store",headers:{...(body?{"Content-Type":"application/json"}:{}),...(token?{Authorization:"Bearer "+token}:{})},body:body?JSON.stringify(body):undefined});
+  let j=null;try{j=await r.json()}catch(e){}
+  if(r.status===401&&j&&j.error==="site")location.reload();
+  return{status:r.status,json:j};
+}
+async function pull(first){
+  try{
+    const r=await call("GET","/api/data"+(first?"":"?since="+version));
+    if(r.status!==200)throw 0;
+    if(r.json.unchanged||saving||saveTimer)return;
+    version=r.json.version;setData(r.json.data);booting=false;shared=true;
+    syncMsg();
+    if(typing())pendingRender=true;else render();
+  }catch(e){if(first){booting=false;shared=false;syncMsg("Can’t reach the server right now.");render()}}
+}
+function save(){
+  if(booting||!shared||ro)return;
+  if(saving){again=true;return}
+  clearTimeout(saveTimer);saveTimer=setTimeout(flush,250);
+}
+async function flush(){
+  saveTimer=null;saving=true;
+  try{
+    const r=await call("PUT","/api/data",{baseVersion:version,data:{members:S.members,items:S.items,loot:S.loot}});
+    if(r.status===200)version=r.json.version;
+    else if(r.status===409){version=r.json.version;setData(r.json.data);syncMsg("Someone else saved at the same moment, so your last change was undone. Please do it again.");render()}
+    else if(r.status===401){token="";try{localStorage.removeItem(TK)}catch(e){}ro=true;refetch=true;syncMsg("Your officer login was rejected. Log in again.")}
+    else syncMsg("Couldn’t save (error "+r.status+"). Your last change may be lost.");
+  }catch(e){syncMsg("Couldn’t reach the server. Your last change may be lost.")}
+  saving=false;
+  if(refetch){refetch=false;again=false;await pull(true);render()}
+  else if(again){again=false;save()}
+}
+function syncMsg(extra){
+  const el=document.querySelector("#sync");if(!el)return;
+  if(document.activeElement&&document.activeElement.id==="pw"&&!extra)return;
+  el.textContent="";
+  const add=(tag,props)=>{const n=document.createElement(tag);Object.assign(n,props);el.append(n);return n};
+  if(booting){el.textContent="Connecting to the guild data…";return}
+  if(!shared){el.textContent=extra||"Can’t reach the server right now.";return}
+  if(ro){
+    add("span",{textContent:"Viewing the guild data. Officers can log in to edit. "});
+    const pw=add("input",{type:"password",id:"pw",placeholder:"Officer password"});pw.setAttribute("aria-label","Officer password");pw.style.marginLeft="6px";
+    add("button",{className:"act",id:"login",textContent:"Log in"}).style.marginLeft="6px";
+  }else{
+    add("span",{textContent:"Signed in as an officer. Changes are shared with everyone. "});
+    add("button",{className:"ghost",id:"logout",textContent:"Log out"});
+    if(!S.members.length&&!S.loot.length&&readLocal())add("button",{className:"act",id:"shareLocal",textContent:"Upload this browser’s saved data"}).style.marginLeft="8px";
+  }
+  if(extra)add("div",{textContent:extra});
+}
+async function login(){
+  const v=document.querySelector("#pw").value;if(!v)return;
+  token=v;const r=await call("POST","/api/login").catch(()=>({status:0}));
+  if(r.status===200){try{localStorage.setItem(TK,token)}catch(e){}ro=false;syncMsg();render()}
+  else{token="";syncMsg(r.status===429?"Too many attempts. Try again in a few minutes.":r.status===401?"Wrong password.":"Can’t reach the server right now.")}
+}
+async function initApi(){
+  if(token){const r=await call("POST","/api/login").catch(()=>({status:0}));ro=r.status!==200;if(ro)token=""}else ro=true;
+  await pull(true);
+  setInterval(()=>pull(false),8000);
+}
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="pw")login()});
+document.addEventListener("focusout",()=>setTimeout(()=>{if(pendingRender&&!typing()){pendingRender=false;render()}},60));
+booting=true;
+S={members:[],items:[],loot:[],next:0};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const opts=(a,sel)=>a.map(x=>`<option${x===sel?" selected":""}>${esc(x)}</option>`).join("");
+const mem=id=>S.members.find(m=>m.id===id);
+const nameOf=id=>{const m=mem(id);return m?`<span class="cls" style="color:${CLASSES[m.cls]||'inherit'}">${esc(m.name)}</span>`:"Unknown"};
+const count=id=>S.loot.filter(l=>l.who===id).length;
+const itemOpts=slot=>{const it=S.items.filter(i=>i.slot===slot).sort((a,b)=>a.name.localeCompare(b.name));return it.length?`<option value="">Choose item</option>`+it.map(i=>`<option>${esc(i.name)}</option>`).join(""):`<option value="">No items for this slot yet</option>`};
+
+function render(){
+  document.body.classList.toggle("ro",ro);
+  const c=ROLES.map(r=>S.members.filter(m=>m.role===r).length);
+  $("#stats").textContent=`${S.members.length} members · ${c[0]} tanks · ${c[1]} healers · ${c[2]} DPS · ${S.loot.length} items dropped${saveFail?" · changes can’t be saved in this browser, use Backup below":""}`;
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===tab));
+  $("#view").innerHTML=tab==="roster"?roster():loot();
+}
+function roster(){
+  const rows=[...S.members].sort((a,b)=>RANKS.indexOf(a.rank)-RANKS.indexOf(b.rank)||a.name.localeCompare(b.name)).map(m=>`
+  <tr><td>${nameOf(m.id)}</td><td>${esc(m.cls)}</td><td>${m.role}</td><td><span class="tag">${m.rank}</span></td><td>${count(m.id)}</td>
+  <td><button class="ghost" data-del-m="${m.id}" aria-label="Remove ${esc(m.name)}">Remove</button></td></tr>`).join("");
+  return`<div class="panel"><form id="fm" class="row"><input name="name" placeholder="Character name" required maxlength="24">
+  <select name="cls">${opts(Object.keys(CLASSES))}</select><select name="role">${opts(ROLES)}</select><select name="rank">${opts(RANKS,"Member")}</select>
+  <button class="act">Add member</button></form></div>
+  <div class="panel scroll">${S.members.length?`<table><tr><th>Name</th><th>Class</th><th>Role</th><th>Rank</th><th>Items won</th><th></th></tr>${rows}</table>`:'<p class="empty">No members yet. Add your first character above.</p>'}</div>`;
+}
+function loot(){
+  const tally=[...S.members].map(m=>[m,count(m.id)]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]).map(([m,n])=>`<span class="tag">${esc(m.name)}: ${n}</span>`).join(" ");
+  const cols=S.loot.some(l=>l.slot==="Other")?[...SLOTS,"Other"]:SLOTS;
+  const grid=[...S.members].sort((x,y)=>RANKS.indexOf(x.rank)-RANKS.indexOf(y.rank)||x.name.localeCompare(y.name)).map(m=>`<tr><td>${nameOf(m.id)}</td>${cols.map(sl=>{const w=S.loot.filter(l=>l.who===m.id&&l.slot===sl);return`<td>${w.length?w.map(l=>esc(l.item)).join("<br>"):'<span class="empty">–</span>'}</td>`}).join("")}<td><strong>${count(m.id)}</strong></td></tr>`).join("");
+  const log=[...S.loot].reverse().map(l=>`<tr><td>${esc(l.item)}</td><td>${esc(l.slot)}</td><td>${nameOf(l.who)}</td><td>${esc(l.date)}</td><td><button class="ghost" data-del-l="${l.id}">Remove</button></td></tr>`).join("");
+  return`<div class="panel"><h2>Log loot</h2>
+  <form id="fl" class="row" style="margin-top:10px"><select name="who" aria-label="Member">${S.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}</select>
+  <select name="slot" id="slotsel" aria-label="Slot">${opts(SLOTS)}</select><select name="item" id="itemsel" required aria-label="Item">${itemOpts(SLOTS[0])}</select><button class="act">Log loot</button></form>
+  <p class="row" style="margin:12px 0 0"><strong>${S.loot.length} dropped overall.</strong> ${tally}</p>
+  <details style="margin-top:12px"><summary>Item catalog (${S.items.length} items)</summary>
+  <form id="fc" style="margin-top:10px"><p class="sub" style="margin:0 0 8px">One item per line as “Slot, Item name”, for example “Head, Lionheart Helm”. Lines without a slot use the slot below. Copy lists from a WoW: Forever item database to fill the dropdowns.</p>
+  <textarea name="lines" rows="5" style="width:100%" placeholder="Head, Item name"></textarea>
+  <div class="row" style="margin-top:8px"><select name="def">${opts(SLOTS)}</select><button class="act">Add to catalog</button><button type="button" class="ghost" data-clear-cat="1">Clear catalog</button></div></form></details>
+  <details style="margin-top:12px"><summary>Import loot from the addon</summary>
+  <form id="fi" style="margin-top:10px"><p class="sub" style="margin:0 0 8px">In game, type /fl exportlog, copy everything in the box, and paste it here. Members who aren’t on the roster are added with their class. Items already imported are skipped.</p>
+  <textarea name="lines" rows="5" style="width:100%" placeholder="Paste exported loot here" required></textarea>
+  <div class="row" style="margin-top:8px"><button class="act">Import loot</button>${importMsg?`<span role="status">${esc(importMsg)}</span>`:""}</div></form></details></div>
+  <div class="panel"><h2>Loot by character</h2>
+  <div class="scroll grid" style="margin-top:8px">${S.members.length?`<table><tr><th>Character</th>${cols.map(c=>`<th>${c}</th>`).join("")}<th>Total</th></tr>${grid}</table>`:'<p class="empty">Add members on the Roster tab to see their loot here.</p>'}</div></div>
+  <div class="panel scroll"><h2>Loot log</h2>${log?`<table><tr><th>Item</th><th>Slot</th><th>Winner</th><th>Date</th><th></th></tr>${log}</table>`:'<p class="empty">No loot logged yet.</p>'}</div>`;
+}
+document.addEventListener("change",e=>{
+  if(e.target.id==="slotsel")$("#itemsel").innerHTML=itemOpts(e.target.value);
+  if(e.target.id==="sheetsel"){sheet=+e.target.value;render()}
+});
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.id==="shareLocal"){const d=readLocal();if(d){S=d;save();render()}return}
+  if(t.id==="login")return login();
+  if(t.id==="logout"){token="";try{localStorage.removeItem(TK)}catch(e){}ro=true;syncMsg();render();return}
+  if(t.dataset.t){tab=t.dataset.t;return render()}
+  if(ro)return;
+  if(t.dataset.delM){const id=+t.dataset.delM;S.members=S.members.filter(m=>m.id!==id);S.loot=S.loot.filter(l=>l.who!==id)}
+  else if(t.dataset.delL)S.loot=S.loot.filter(l=>l.id!==+t.dataset.delL);
+  else if(t.dataset.clearCat){if(!confirm("Remove every item from the catalog? Logged loot stays."))return;S.items=[]}
+  else return;
+  save();render();
+});
+const CLS={DRUID:"Druid",HUNTER:"Hunter",MAGE:"Mage",PALADIN:"Paladin",PRIEST:"Priest",ROGUE:"Rogue",SHAMAN:"Shaman",WARLOCK:"Warlock",WARRIOR:"Warrior"};
+function importLog(text){
+  let add=0,dup=0,newM=0,bad=0;
+  text.split("\n").forEach(line=>{
+    line=line.trim();if(!line||line[0]==="#")return;
+    const p=line.split(";").map(x=>x.trim());
+    if(p.length<5||!p[0]||!p[3]){bad++;return}
+    const[who,cls,slot,item,date]=p;
+    let m=S.members.find(x=>x.name.toLowerCase()===who.toLowerCase());
+    if(!m){m={id:nid(),name:who,cls:CLS[cls]||"Warrior",role:"DPS",rank:"Member"};S.members.push(m);newM++}
+    if(S.loot.some(l=>l.who===m.id&&l.item===item&&l.date===date)){dup++;return}
+    const sl=SLOTS.includes(slot)?slot:"Other";
+    S.loot.push({id:nid(),item,slot:sl,who:m.id,date});add++;
+    if(sl!=="Other"&&!S.items.some(x=>x.slot===sl&&x.name.toLowerCase()===item.toLowerCase()))S.items.push({slot:sl,name:item});
+  });
+  importMsg=`Imported ${add} items, added ${newM} new members, skipped ${dup} duplicates${bad?`, ${bad} unreadable lines`:""}.`;
+}
+document.addEventListener("submit",e=>{
+  e.preventDefault();if(ro)return;const f=Object.fromEntries(new FormData(e.target));
+  if(e.target.id==="fm")S.members.push({id:nid(),name:f.name.trim(),cls:f.cls,role:f.role,rank:f.rank});
+  if(e.target.id==="fl"){if(!f.item)return;S.loot.push({id:nid(),item:f.item,slot:f.slot,who:+f.who,date:new Date().toLocaleDateString()})}
+  if(e.target.id==="fc"){f.lines.split("\n").forEach(line=>{line=line.trim();if(!line)return;let slot=f.def,name=line;const i=line.indexOf(",");
+    if(i>0){const sl=SLOTS.find(x=>x.toLowerCase()===line.slice(0,i).trim().toLowerCase());if(sl){slot=sl;name=line.slice(i+1).trim()}}
+    if(name&&!S.items.some(x=>x.slot===slot&&x.name.toLowerCase()===name.toLowerCase()))S.items.push({slot,name})})}
+  if(e.target.id==="fi")importLog(f.lines);
+  save();render();
+});
+const bk=$("#bk"),bmsg=t=>{$("#bkmsg").textContent=t};
+function restore(txt){if(ro)return;try{const d=JSON.parse(txt);if(d.members&&d.loot){d.items=d.items||[];d.loot=d.loot.map(l=>({slot:"Other",...l}));S=d;save();render();$("#bkmsg").textContent=`Restored ${d.members.length} members and ${d.loot.length} items.`}else bmsg("That isn’t a valid backup.")}catch(e){bmsg("That isn’t a valid backup.")}}
+$("#bkmake").onclick=()=>{bk.value=JSON.stringify(S);bk.select();bmsg("Copy this text and keep it somewhere safe.")};
+$("#bkdl").onclick=()=>{try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="fire-res-guild-backup.json";a.click();bmsg("Backup file downloaded, if your browser allows it here.")}catch(e){bmsg("Downloading isn’t available here. Use Show backup and copy the text.")}};
+$("#bkload").onclick=()=>restore(bk.value);
+$("#bkopen").onclick=()=>$("#bkfile").click();
+$("#bkfile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>restore(r.result);r.readAsText(f)};
+render();initApi();
+</script>
+</body>
+</html>

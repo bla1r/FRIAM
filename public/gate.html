@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fire Res is a Myth</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🔥%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Alegreya+Sans:wght@400;700&display=swap">
+<style>
+:root{--bg:#efe6dc;--panel:#fbf6f0;--ink:#2a1a14;--mute:#6f5748;--gold:#b83a0a;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#1a1210;--panel:#251915;--ink:#f1e3d3;--mute:#b59a88;--gold:#ff7a2f}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Alegreya Sans",system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:16px}
+main{width:100%;max-width:380px;text-align:center}
+h1{font-family:"Pirata One",Georgia,serif;font-weight:400;font-size:2.8rem;line-height:1.1;margin:0 0 6px;color:var(--gold)}
+h1::after{content:"";display:block;height:4px;width:150px;margin:10px auto 0;background:linear-gradient(90deg,#7c1d06,#ff7a2f,#ffd166)}
+p{color:var(--mute);margin:14px 0}
+form{background:var(--panel);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--gold);padding:18px;display:flex;flex-direction:column;gap:10px}
+input,button{font:inherit;padding:10px;border:1px solid var(--mute);border-radius:2px;background:var(--bg);color:var(--ink)}
+button{background:var(--gold);border-color:var(--gold);color:var(--panel);font-weight:700;cursor:pointer}
+input:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#err{min-height:1.5em;margin:0;color:var(--gold)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Fire Res is a Myth</h1>
+  <p>Guild members only. Enter the password to continue.</p>
+  <form id="f">
+    <input id="pw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password" autofocus required>
+    <button>Enter</button>
+    <p id="err" role="status"></p>
+  </form>
+</main>
+<script>
+document.getElementById("f").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const err=document.getElementById("err");err.textContent="";
+  try{
+    const r=await fetch("/enter",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:document.getElementById("pw").value})});
+    if(r.ok)location.reload();
+    else err.textContent=r.status===429?"Too many attempts. Try again in a few minutes.":"That isn’t the password.";
+  }catch(x){err.textContent="Can’t reach the server right now."}
+});
+</script>
+</body>
+</html>
